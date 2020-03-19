@@ -1,0 +1,175 @@
+@import "stylesheet.css";
+
+*{
+    margin: 0;
+    padding: 0;
+}
+body,html{
+    height: 100%;
+}
+.wrapper{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: #6675d6;
+}
+
+#logoService{
+    width: 9%;
+    margin-top: 7%;
+    margin-left: 47%;
+}
+
+#signIn{
+    float: right;
+    color: #FFFFFF;
+    font-family: Consolas, sans-serif;
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-top: 1%;
+    margin-right: 1%;
+    cursor: pointer;
+}
+
+#inputName{
+    margin-top: 2%;
+    border-radius: 47px;
+    width: 75%;
+    height: 9vh;
+    margin-left: 14%;
+    border: none;
+    font-family: "Consolas Bold", sans-serif;
+    font-weight: bold;
+    padding-left: 2%;
+    padding-right: 2%;
+    box-sizing: border-box;
+    font-size: 1.5em;
+    color: #787878;
+}
+
+#inputName::placeholder{
+    color: #787878;
+}
+
+input[type='button']{
+    position: relative;
+    margin-top: 1%;
+    border-radius: 47px;
+    width: 15%;
+    height: 7vh;
+    border: none;
+    font-family: "Consolas Bold", sans-serif;
+    font-weight: bold;
+    color: #787878
+}
+#btnSearch{
+    float: left;
+    margin-left: 28%;
+}
+
+#btnAddService {
+	float: right;
+    right: 30%;
+	margin-right: -7%;
+    width: 17%;
+}
+
+input[type='button']:hover{
+    background-color: #8E9BEB;
+    cursor: pointer;
+    color: #FFF;
+}
+
+input[type='button']:active{
+    background-color: #FFFFFF;
+    color: #787878
+}
+
+#name_micros li{
+    list-style: none;
+    display: block;
+    background-color: #f3f3f3;
+}
+
+#name_micros li{
+    margin: 3%;
+}
+
+#name_micros li ul:not(#formLoad){
+    display: block;
+    padding: 7%;
+}
+
+#formLoad{
+    float: right;
+    position: absolute;
+    padding-top: 1%;
+    padding-left: 81.5%;
+}
+
+#formLoad li:nth-child(1){
+    padding-bottom: 40%;
+}
+
+#loadService{
+    width: 200%;
+    height: 7vh;
+    background-color: #6675d6;
+    color: #fff;
+    right: 24%;
+}
+
+#loadService:hover{
+    background-color: #8E9BEB;
+    cursor: pointer;
+}
+
+#loadService:active{
+    background-color: #6675d6;
+}
+
+#formLoad p{
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+#name_micros li ul li{
+    padding-top: 5%;
+    padding-left: 11%;
+    float: left;
+    margin-top: -5%;
+}
+
+#name_micros li ul li:nth-child(1){
+    margin-left: -7%;
+}
+
+#name_micros li ul li:nth-child(2){
+    margin-left: 7%;
+}
+
+#name_micros li span {
+	border-left: 2px solid black;
+	height: 20%;
+	position: absolute;
+	margin-top: 2%;
+	opacity: 0.2;
+    margin-left: 30%;
+
+}
+
+#name_micros li p{
+    font-family: "Consolas Bold", sans-serif;
+    font-weight: bold;
+    color: #787878;
+}
+
+#exitst{
+    font-family: "Consolas Bold", sans-serif;
+    font-style: italic;
+    font-size: 0.8em;
+    color: #787878;
+    opacity: 0.5;
+    padding-top: 13%;
+    padding-left: 40%;
+}
