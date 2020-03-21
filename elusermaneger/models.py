@@ -9,9 +9,9 @@ from elusermaneger.manager import ElUserManager
 
 
 class ElBaseUser(AbstractBaseUser, PermissionsMixin):
-    login = models.CharField(max_length=255, verbose_name='Логин')
     email = models.EmailField(_('email address'), unique=True)
     password = models.CharField(_('password'), max_length=128)
+    login = models.CharField(max_length=255, verbose_name='Логин')
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     last_login = models.DateTimeField(_('last login'), blank=True, null=True)
