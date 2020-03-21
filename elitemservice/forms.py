@@ -1,0 +1,10 @@
+from django import forms
+
+from elservicecollection.models import Service
+
+
+class LoginUser(forms.ModelForm):
+
+    class Meta:
+        model = Service
+        fields = '__all__'

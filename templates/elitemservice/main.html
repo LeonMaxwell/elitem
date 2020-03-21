@@ -23,8 +23,33 @@
     </form>
 </div>
 <ul id="name_micros"></ul>
+
 <script src="{% static 'elitemservice/js/jquery.js' %}"></script>
 <script>
+
+    $('#signIn').click(function () {
+        let name_micros = $('#name_micros');
+        if (!name_micros.empty()){name_micros.val("")}
+        $.ajax({
+            url: {% url 'login' %},
+            success: function (data) {
+                $('.wrapper').animate({'height':'38%'}, 700);
+                $('#logoService').
+                    attr('src','{% static 'elitemservice/img/LogogServiceWithoutText.svg' %}')
+                    .animate({
+                        'margin-top':'0.8%',
+                        'width':'6%',
+                        'margin-left':'48%'
+                    });
+                $('#inputName').animate({
+                    'margin-top': '1%',
+                    'height': '7vh',
+                });
+
+                name_micros.append(data)
+            }
+        });
+    });
 
     $('#formSearch').on("submit", function (event) {
         event.preventDefault();
