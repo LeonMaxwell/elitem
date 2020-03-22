@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from django.views.generic import CreateView
+from django.views.generic import CreateView, TemplateView
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,13 +12,14 @@ from elservicecollection.models import Service
 
 
 class GetServiceList(APIView):
+
     def get(self, request):
         service = Service.objects.all()
         serialized = ServiceSerializer(service, many=True)
         return Response({'Services': serialized.data})
 
 
-class Logid(CreateView):
+class Login(CreateView):
     template_name = 'elitemservice/forms/login.html'
     model = Service
 
@@ -26,5 +27,5 @@ class Logid(CreateView):
         return render(request, self.template_name, {'forms': LoginUser()})
 
 
-def homepage(request):
-    return render(request, 'elitemservice/main.html')
+class HomePage(TemplateView):
+    template_name = 'elitemservice/main.html'

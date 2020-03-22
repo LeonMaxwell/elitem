@@ -22,13 +22,13 @@
         <input type="button" value="Добавить микросервис" id="btnAddService">
     </form>
 </div>
-<ul id="name_micros"></ul>
 
+<div id="extends"></div>
 <script src="{% static 'elitemservice/js/jquery.js' %}"></script>
 <script>
 
     $('#signIn').click(function () {
-        let name_micros = $('#name_micros');
+        let name_micros = $('#extends');
         if (!name_micros.empty()){name_micros.val("")}
         $.ajax({
             url: {% url 'login' %},
@@ -59,7 +59,7 @@
     $("#inputName").keypress(function (event) {
         if (event.keyCode === 13){
             let name_serv = $("#inputName").val();
-            let name_micros = $('#name_micros');
+            let name_micros = $('#extends');
             $.ajax({
                 url: "{% url 'apiServices' %}",
                 dataType: "json",
@@ -81,30 +81,30 @@
                     for (let i=0; i<list_service.length; i++){
                         if (name_serv === ""){
                             name_micros.append(
-                                '<li>' +
-                                    '<span> </span>' +
-                                    '<ul id="formLoad">' +
-                                        '<li>'+
-                                            '<input type="button" value="Загрузить" class="' + list_service[i].id +'" id="loadService">'+
+                                '<ul id="name_micros"> <li>' +
+                                        '<span> </span>' +
+                                        '<ul id="formLoad">' +
+                                            '<li>'+
+                                                '<input type="button" value="Загрузить" class="' + list_service[i].id +'" id="loadService">'+
+                                            '</li>' +
+                                        '<li>' +
+                                            '<p> Подробнее... </p>' +
                                         '</li>' +
-                                    '<li>' +
-                                        '<p> Подробнее... </p>' +
-                                    '</li>' +
-                                '</ul>' +
-                                '<ul> ' +
-                                    '<li> ' +
-                                        '<p>' + list_service[i].name_service + '</p>' +
-                                    '</li>' +
-                                    '<li> ' +
-                                        '<p>' + list_service[i].about_service + '</p>' +
-                                    '</li>' +
-                                '</ul>' +
-                            '</li>'
+                                    '</ul>' +
+                                    '<ul> ' +
+                                        '<li> ' +
+                                            '<p>' + list_service[i].name_service + '</p>' +
+                                        '</li>' +
+                                        '<li> ' +
+                                            '<p>' + list_service[i].about_service + '</p>' +
+                                        '</li>' +
+                                    '</ul>' +
+                                '</li> </ul>'
                             );
                         }
                         else if (name_serv === data["Services"][i].name_service){
                             name_micros.append(
-                                '<li>' +
+                                '<ul id="name_micros"> <li>' +
                                 '<span> </span>' +
                                 '<ul id="formLoad">' +
                                     '<li> ' +
@@ -122,7 +122,7 @@
                                         '<p>' + list_service[i].about_service + '</p>' +
                                     '</li>' +
                                 '</ul>' +
-                            '</li>'
+                            '</li> </ul>'
                             );
                         }
                     }
@@ -139,7 +139,7 @@
 
     $('#btnSearch').click(function () {
         let name_serv = $("#inputName").val();
-        let name_micros = $('#name_micros');
+        let name_micros = $('#extends');
         $.ajax({
             url: "{% url 'apiServices' %}",
             dataType: "json",
@@ -161,7 +161,7 @@
                 for (let i=0; i<list_service.length; i++){
                     if (name_serv === ""){
                         name_micros.append(
-                            '<li>' +
+                            '<ul id="name_micros"> <li>' +
                                 '<span> </span>' +
                                 '<ul id="formLoad">' +
                                     '<li> ' +
@@ -179,12 +179,12 @@
                                         '<p>' + list_service[i].about_service + '</p>' +
                                     '</li>' +
                                 '</ul>' +
-                            '</li>'
+                            '</li> </ul>'
                         );
                     }
                     if (name_serv === data["Services"][i].name_service){
                         name_micros.append(
-                            '<li>' +
+                            '<ul id="name_micros"> <li>' +
                                 '<span> </span>' +
                                 '<ul id="formLoad">' +
                                     '<li> ' +
@@ -202,7 +202,7 @@
                                         '<p>' + list_service[i].about_service + '</p>' +
                                     '</li>' +
                                 '</ul>' +
-                            '</li>'
+                            '</li> </ul>'
                         );
                     }
                 }

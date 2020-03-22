@@ -1,5 +1,12 @@
-<form method="get">
+{% load bootstrap_tags %}
+
+<form method="get" id="login">
     {% csrf_token %}
-    {{ forms.as_table }}
-    <input type="button" value="Ненайти сервис">
+    {{ forms|as_bootstrap }}
+    <label>
+        <input type="button" value="Войти">
+    </label>
+    <label>
+        <input type="button" value="Зарегестрироватся">
+    </label>
 </form>

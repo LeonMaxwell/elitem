@@ -173,3 +173,20 @@ input[type='button']:active{
     padding-top: 13%;
     padding-left: 40%;
 }
+
+#extends #login{
+    padding-left: 41%;
+    padding-top: 7%;
+    position: relative;
+}
+
+#extends #login input{
+    padding-left: 1%;
+    margin-bottom: 3%;
+    width: 25%;
+    left: -14%;
+}
+
+#extends #login label{
+    margin-right: 5%;
+}
