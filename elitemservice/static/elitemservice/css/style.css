@@ -187,6 +187,20 @@ input[type='button']:active{
     left: -14%;
 }
 
+#extends #login input[type='button']{
+    background-color: #6675d6;
+    color: #fff;
+    cursor: pointer;
+}
+
+#extends #login input[type='button']:hover{
+    background-color: #8E9BEB;
+}
+
+#extends #login input[type='button']:active{
+    background-color: #6675d6;
+}
+
 #extends #login label{
     margin-right: 5%;
 }
