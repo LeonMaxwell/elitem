@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_forms_bootstrap',
+    'bootstrap4',
     'elitemservice.apps.ElitemserviceConfig',
     'elitemassistent.apps.ElitemassistentConfig',
     'elservicecollection.apps.ElservicecollectionConfig',
@@ -107,6 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'elusermaneger.ElBaseUser'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

@@ -1,12 +1,17 @@
-{% load bootstrap_tags %}
-
-<form method="get" id="login">
+{% load bootstrap4 %}
+{% if user.is_authenticated %}
+    <p>Слава</p>
+{% endif %}
+{{ user }}
+<form method="post" id="login">
     {% csrf_token %}
-    {{ forms|as_bootstrap }}
+    {% for field in form %}
+        {% bootstrap_field field layout='horizontal' %}
+    {% endfor %}
     <label>
-        <input type="button" value="Войти">
+        <input type="button" value="Войти" id="loginBtn">
     </label>
     <label>
-        <input type="button" value="Зарегестрироватся">
+        <input type="button" value="Зарегестрироватся" id="regBtn">
     </label>
 </form>

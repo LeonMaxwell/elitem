@@ -26,7 +26,6 @@
 <div id="extends"></div>
 <script src="{% static 'elitemservice/js/jquery.js' %}"></script>
 <script>
-
     $('#signIn').click(function () {
         let name_micros = $('#extends');
         if (!name_micros.empty()){name_micros.val("")}
@@ -215,6 +214,7 @@
         });
     });
 
+
     $(function() {
         $(document).on('click touchstart', '#loadService', function(){
             let id_li = $(this).attr('class');
@@ -230,6 +230,21 @@
                 }
             })
         });
+
+        $(document).on('click touchstart', '#loginBtn', function(){
+            $.ajax({
+                type:"POST",
+                url: "{% url 'login' %}",
+                data: {
+                    'email':$('#id_email').val(),
+                    'password':$('#id_password').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                success: function () {
+                    window.location = '/'
+                }
+            })
+        });
+
     });
 
 </script>

@@ -14,7 +14,7 @@ class LoginUser(forms.ModelForm):
 
     class Meta:
         model = ElBaseUser
-        fields = ('email', 'password', )
+        fields = ('email', 'password')
 
 
 class RegisterUser(UserCreationForm):
