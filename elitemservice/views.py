@@ -1,15 +1,18 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.views import LogoutView
 from django.shortcuts import render
 
 # Create your views here.
-from django.views.generic import TemplateView, FormView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, FormView, CreateView
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from elitemservice.forms import LoginUser
+from elitemservice.forms import LoginUser, RegisterUser
 from elitemservice.serializers import ServiceSerializer
 from elservicecollection.models import Service
+from elusermaneger.models import ElBaseUser
 
 
 class GetServiceList(APIView):
@@ -22,11 +25,10 @@ class GetServiceList(APIView):
 
 class Login(FormView):
     template_name = 'elitemservice/forms/login.html'
-    model = Service
     form_class = LoginUser
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name, {'form': self.form_class})
+        return render(request, self.template_name, {'form': self.form_class, 'act' : 'login'})
 
     def post(self, request, *args, **kwargs):
         form = LoginUser(request.POST)
@@ -41,6 +43,18 @@ class Login(FormView):
                 return render(request, 'elitemservice/forms/login.html')
         else:
             return render(request, 'elitemservice/forms/login.html')
+
+
+class LogOut(LogoutView):
+    template_name = 'elitemservice/main.html'
+
+
+class Register(CreateView):
+    model = ElBaseUser
+    template_name = 'elitemservice/forms/login.html'
+    form_class = RegisterUser
+    success_url = reverse_lazy('homepage')
+
 
 
 class HomePage(TemplateView):

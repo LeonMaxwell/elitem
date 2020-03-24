@@ -1,17 +1,19 @@
 {% load bootstrap4 %}
-{% if user.is_authenticated %}
-    <p>Слава</p>
-{% endif %}
-{{ user }}
 <form method="post" id="login">
     {% csrf_token %}
     {% for field in form %}
         {% bootstrap_field field layout='horizontal' %}
     {% endfor %}
-    <label>
-        <input type="button" value="Войти" id="loginBtn">
-    </label>
-    <label>
-        <input type="button" value="Зарегестрироватся" id="regBtn">
-    </label>
+    {% if act == 'login' %}
+        <label>
+            <input type="button" value="Войти" id="loginBtn">
+        </label>
+        <label>
+            <input type="button" value="Зарегестрироватся" id="regBtn">
+        </label>
+    {% else %}
+        <label>
+            <input type="button" value="Зарегестрироватся" id="regBtn">
+        </label>
+    {% endif %}
 </form>

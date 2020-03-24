@@ -11,7 +11,11 @@
 </head>
 <body>
 <div class="wrapper">
-    <p id="signIn">Войти/Зарегестрироватся</p>
+    {% if user.is_authenticated %}
+        <p id="user">{{ user.login }}</p>
+    {% else %}
+         <p id="signIn">Войти/Зарегестрироватся</p>
+    {% endif %}
     <img src="{% static 'elitemservice/img/Sloy_1.png' %}" id="logoService" alt="Logos"/>
     <form method="post" id="formSearch">
         {% csrf_token %}
@@ -26,6 +30,16 @@
 <div id="extends"></div>
 <script src="{% static 'elitemservice/js/jquery.js' %}"></script>
 <script>
+
+    $('#user').click(function () {
+        $.ajax({
+            url: {% url 'logout' %},
+            success: function () {
+                window.location = '/'
+            }
+        })
+    });
+
     $('#signIn').click(function () {
         let name_micros = $('#extends');
         if (!name_micros.empty()){name_micros.val("")}
@@ -245,7 +259,41 @@
             })
         });
 
-    });
+
+        $(document).on('click touchstart', '#regBtn', function(){
+            $.ajax({
+                type:"GET",
+                url: "{% url 'register' %}",
+                success: function (data) {
+                    let extendfield = $('#extends');
+                    if (!extendfield.empty()){extendfield.val("")}
+                    extendfield.append(data);
+                    $('#extends #login input').css('left', 'auto');
+                    $('#regBtn').attr('id','regUser');
+                }
+            })
+        });
+
+
+        $(document).on('click touchstart', '#regUser', function(){
+            $.ajax({
+                type:"POST",
+                url: "{% url 'register' %}",
+                data: {
+                    'login': $('#id_login').val(),
+                    'email': $('#id_email').val(),
+                    'password1': $('#id_password1').val(),
+                    'password2': $('#id_password2').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function () {
+                    window.location = '/';
+                    alert("С успешой регестрацией!!!");
+                }
+            })
+        });
+
+    })
 
 </script>
 </body>
