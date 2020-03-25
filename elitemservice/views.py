@@ -55,6 +55,23 @@ class Register(CreateView):
     form_class = RegisterUser
     success_url = reverse_lazy('homepage')
 
+    def post(self, request, *args, **kwargs):
+        user_form = RegisterUser(request.POST)
+        logb = user_form['login'].data
+        email = user_form['email'].data
+        password = user_form['password1'].data
+        password_confirm = user_form['password2'].data
+        if password == password_confirm:
+            ElBaseUser.objects.create_user(email, password, logb)
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return render(request, 'elitemservice/forms/login.html')
+                else:
+                    return render(request, 'elitemservice/forms/login.html')
+            else:
+                return render(request, 'elitemservice/forms/login.html')
 
 
 class HomePage(TemplateView):
