@@ -1,5 +1,14 @@
 {% load bootstrap4 %}
+{% if email_suc %}
+    <div id="emailSend">
+        <h1>Регистрация прошла успешно!!</h1>
+        <p>На почту {{ email_suc }} отправлено сообщение для активации вашего аккаунта!!</p>
+    </div>
+{% else %}
 <form method="post" id="login">
+    {% if error %}
+        {{ error }}
+    {% endif %}
     {% csrf_token %}
     {% for field in form %}
         {% bootstrap_field field layout='horizontal' %}
@@ -17,3 +26,4 @@
         </label>
     {% endif %}
 </form>
+{% endif %}

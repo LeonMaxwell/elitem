@@ -268,14 +268,18 @@
                     let extendfield = $('#extends');
                     if (!extendfield.empty()){extendfield.val("")}
                     extendfield.append(data);
-                    $('#extends #login input').css('left', 'auto');
+                    $('#extends #login input').css('left', '1%');
                     $('#regBtn').attr('id','regUser');
                 }
             })
         });
 
+        $(document).on('click touchstart', '#isRegValid', function(){
+            window.location = '/'
+        });
 
         $(document).on('click touchstart', '#regUser', function(){
+
             $.ajax({
                 type:"POST",
                 url: "{% url 'register' %}",
@@ -286,9 +290,11 @@
                     'password2': $('#id_password2').val(),
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
-                success: function () {
-                    window.location = '/';
-                    alert("С успешой регестрацией!!!");
+                success: function (data) {
+                    let extendfield = $('#extends');
+                    if (!extendfield.empty()){extendfield.val("")}
+                    extendfield.append(data);
+                    $('#extends #login input').css('left', '1%');
                 }
             })
         });
