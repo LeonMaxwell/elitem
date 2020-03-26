@@ -33,9 +33,23 @@
 
     $('#user').click(function () {
         $.ajax({
-            url: {% url 'logout' %},
-            success: function () {
-                window.location = '/'
+            url: {% url 'profile'%},
+            success: function (data) {
+                $('.wrapper').animate({'height':'38%'}, 700);
+                $('#logoService').
+                    attr('src','{% static 'elitemservice/img/LogogServiceWithoutText.svg' %}')
+                    .animate({
+                        'margin-top':'0.8%',
+                        'width':'6%',
+                        'margin-left':'48%'
+                    });
+                $('#inputName').animate({
+                    'margin-top': '1%',
+                    'height': '7vh',
+                });
+                let extendfield = $('#extends');
+                if (!extendfield.empty()){extendfield.val("")}
+                extendfield.append(data);
             }
         })
     });

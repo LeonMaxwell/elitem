@@ -103,8 +103,9 @@ class Register(CreateView):
                                                                       'form': self.form_class})
 
 
-class RegisterDone(TemplateView):
-    template_name = 'elitemservice/forms/register_done.html'
+class Profile(TemplateView):
+    template_name = 'elitemservice/extension/profile.html'
+    model = ElBaseUser
 
 
 class HomePage(TemplateView):

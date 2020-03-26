@@ -1,0 +1,13 @@
+<p id="head_info">Активные микросервисы</p>
+<div class="nav-list">
+    <ul>
+        <li>{{ user.login }}</li>
+        <li><hr style="opacity: .3"></li>
+        <li><p id="active_services">Активные микросервисы</p></li>
+        <li><p id="setting_profile">Настройки аккаунта</p></li>
+        <li><p id="logout">Выйти</p></li>
+    </ul>
+</div>
+{% for foo in user.loads_services.all %}
+    {{ foo.name_service }}
+{% endfor %}
