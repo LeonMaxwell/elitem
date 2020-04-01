@@ -247,7 +247,9 @@
         $(document).on('click touchstart', '#loadService', function(){
             let id_li = $(this).attr('class');
             $.ajax({
+                type: "GET",
                 url: "{% url 'apiServices' %}",
+                data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
                 dataType: "json",
                 success: function (data) {
                     for (let i=0; i<data["Services"].length; i++){
@@ -309,6 +311,15 @@
                     if (!extendfield.empty()){extendfield.val("")}
                     extendfield.append(data);
                     $('#extends #login input').css('left', '1%');
+                }
+            })
+        });
+
+        $(document).on('click touchstart', '#logout', function(){
+            $.ajax({
+                url: "{% url 'logout' %}",
+                success: function () {
+                    window.location = '/'
                 }
             })
         });

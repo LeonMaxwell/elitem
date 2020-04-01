@@ -21,6 +21,15 @@ class GetServiceList(APIView):
         serialized = ServiceSerializer(service, many=True)
         return Response({'Services': serialized.data})
 
+    def post(self, request):
+        service = Service.objects.all()
+        serializer = ServiceSerializer(service, many=True)
+        user = request.user
+        if user.is_authenticated:
+            pass
+        context = {'user': user, 'Services': serializer}
+        return render(request, 'elitemservice/main.html', context)
+
 
 class Login(FormView):
     template_name = 'elitemservice/forms/login.html'
