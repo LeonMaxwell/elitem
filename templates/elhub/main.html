@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Elitem - Hub</title>
+    <link rel="stylesheet" href="{% static 'elhub/css/style.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'elhub/css/stylesheet.css' %}" type="text/css">
+</head>
+<body>
+<object id="logosElhub" type="image/svg+xml" data="{% static 'elhub/img/logos_asistent.svg' %}" width="200" height="200" ></object>
+<div id="elemForks">
+{% for fork in forks %}
+    <ul>
+        <li>{{ fork.name_forks }}</li>
+        <li><hr/></li>
+        <li>{{ fork.about_forks }}</li>
+        <li><hr/></li>
+        <li><a href="{{ fork.path_forks }}/">Перейти</a></li>
+    </ul>
+{% endfor %}
+</div>
+
+</body>
+</html>

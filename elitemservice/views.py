@@ -10,6 +10,7 @@ from rest_framework.views import APIView
 
 from elitemservice.forms import LoginUser, RegisterUser
 from elitemservice.serializers import ServiceSerializer
+from elservicecollection.forms import AddServiceForm
 from elservicecollection.models import Service
 from elusermaneger.models import ElBaseUser
 
@@ -22,13 +23,53 @@ class GetServiceList(APIView):
         return Response({'Services': serialized.data})
 
     def post(self, request):
+        id_service = request.POST.get('current_id', None)
         service = Service.objects.all()
-        serializer = ServiceSerializer(service, many=True)
+        serialized = ServiceSerializer(service, many=True)
         user = request.user
         if user.is_authenticated:
-            pass
-        context = {'user': user, 'Services': serializer}
+            user.loads_services.add(service.get(pk=id_service))
+            user.save()
+        context = {'user': user, 'Services': serialized.data}
         return render(request, 'elitemservice/main.html', context)
+
+
+class AddService(FormView):
+    template_name = 'elitemservice/forms/addservice.html'
+    form_class = AddServiceForm
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'form': self.form_class})
+
+    def post(self, request, *args, **kwargs):
+        form = AddServiceForm(request.POST)
+        model = Service.objects.all()
+        to_pk = model.count() + 1
+        name_service = form['name_service'].data
+        about_service = form['about_service'].data
+        file_service = form['file_service'].data
+        user = request.user
+        if user.is_authenticated:
+            user.loads_services.create(
+                pk=to_pk,
+                name_service=name_service,
+                about_service=about_service,
+                file_service=file_service
+            )
+            user.save()
+        return render(request, 'elitemservice/main.html')
+
+
+class DeleteService(CreateView):
+    def post(self, request, *args, **kwargs):
+        id_service = request.POST.get('current_id', None)
+        service = Service.objects.all()
+        serialized = ServiceSerializer(service, many=True)
+        user = request.user
+        if user.is_authenticated:
+            user.loads_services.remove(service.get(pk=id_service))
+            user.save()
+        return render(request, 'elitemservice/main.html')
 
 
 class Login(FormView):

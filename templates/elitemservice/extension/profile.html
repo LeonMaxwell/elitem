@@ -8,6 +8,23 @@
         <li><p id="logout">Выйти</p></li>
     </ul>
 </div>
-{% for foo in user.loads_services.all %}
-    {{ foo.name_service }}
-{% endfor %}
+<div class="saved_service">
+    <ul id="name_micros">
+        {% for foo in user.loads_services.all %}
+            <li class="saveService" id="{{ foo.pk }}">
+                <span></span>
+                <ul id="formLoad">
+                    <input type="button" value="Удалить сервис" class="btnDelete" id="{{ foo.pk }}">
+                </ul>
+                <ul>
+                    <li>
+                        <p>{{ foo.name_service }}</p>
+                    </li>
+                     <li>
+                         <p>{{ foo.about_service }}</p>
+                     </li>
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

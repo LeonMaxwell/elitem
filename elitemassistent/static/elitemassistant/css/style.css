@@ -1,0 +1,8 @@
+.some_id_in_svg{
+    transform-origin: center center;
+    animation-name: rotation;
+    transform-box: fill-box;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}

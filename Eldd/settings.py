@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'elitemassistent.apps.ElitemassistentConfig',
     'elservicecollection.apps.ElservicecollectionConfig',
     'elusermaneger.apps.ElusermanegerConfig',
+    'elhub.apps.ElhubConfig',
 ]
 
 MIDDLEWARE = [
@@ -113,6 +114,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+APPEND_SLASH = False
 
 LANGUAGE_CODE = 'en-us'
 

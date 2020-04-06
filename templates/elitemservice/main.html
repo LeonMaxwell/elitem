@@ -31,6 +31,30 @@
 <script src="{% static 'elitemservice/js/jquery.js' %}"></script>
 <script>
 
+    $('#btnAddService').click(function () {
+        $.ajax({
+            type: 'GET',
+            url: '{% url 'addService' %}',
+            success: function (data) {
+                $('.wrapper').animate({'height':'38%'}, 700);
+                $('#logoService').
+                    attr('src','{% static 'elitemservice/img/LogogServiceWithoutText.svg' %}')
+                    .animate({
+                        'margin-top':'0.8%',
+                        'width':'6%',
+                        'margin-left':'48%'
+                    });
+                $('#inputName').animate({
+                    'margin-top': '1%',
+                    'height': '7vh',
+                });
+                 let extendfield = $('#extends');
+                if (!extendfield.empty()){extendfield.val("")}
+                extendfield.append(data);
+        }})
+    });
+
+
     $('#user').click(function () {
         $.ajax({
             url: {% url 'profile'%},
@@ -247,17 +271,13 @@
         $(document).on('click touchstart', '#loadService', function(){
             let id_li = $(this).attr('class');
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "{% url 'apiServices' %}",
-                data: {'csrfmiddlewaretoken': '{{ csrf_token }}'},
-                dataType: "json",
-                success: function (data) {
-                    for (let i=0; i<data["Services"].length; i++){
-                        if (parseInt(id_li) === data["Services"][i].id){
-                            alert("Вы выбрали " + data["Services"][i].name_service);
-                        }
-                    }
-                }
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'current_id': id_li,
+                },
+                dataType: "json"
             })
         });
 
@@ -270,7 +290,7 @@
                     'password':$('#id_password').val(),
                     'csrfmiddlewaretoken': '{{ csrf_token }}'},
                 success: function () {
-                    window.location = '/'
+                    window.location = '/service/'
                 }
             })
         });
@@ -319,10 +339,43 @@
             $.ajax({
                 url: "{% url 'logout' %}",
                 success: function () {
-                    window.location = '/'
+                    window.location = '/service/'
                 }
             })
         });
+
+        $(document).on('click touchstart', '.btnDelete', function () {
+            let id_li = $(this).attr('id');
+            $.ajax({
+                type: "POST",
+                url: "{% url 'deleteService' %}",
+                data: {
+                    'current_id': id_li,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function () {
+                   window.location = '/'
+                }
+            })
+        });
+
+
+        $(document).on('click touchstart', '#addService', function () {
+            $.ajax({
+                type: "POST",
+                url: "{% url 'addService' %}",
+                data: {
+                    'name_service': $('#id_name_service').val(),
+                    'about_service': $('#id_about_service').val(),
+                    'file_service': $('#id_file_service').val(),
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function () {
+                   window.location = '/'
+                }
+            })
+        })
+
 
     })
 

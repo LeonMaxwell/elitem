@@ -1,0 +1,14 @@
+<?xml-stylesheet type="text/css" href="../css/style.css"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="360.857" height="406.49" viewBox="0 0 360.857 406.49">
+  <g id="Group_15" transform="translate(-669.334 -110.367)">
+    <path id="Path_34" d="M15.425,183.566,126.2-2.591,234.659,183.566,126.2,372.8Z" transform="translate(726 120)" fill="#9e2929"/>
+    <path id="Path_35" d="M71.736,0c39.619,0,71.737,32.934,71.737,73.56s-32.117,73.559-71.736,73.559a70.6,70.6,0,0,1-48.066-18.954A74.107,74.107,0,0,1,0,73.559C0,32.933,32.117,0,71.736,0Z" transform="matrix(-0.799, -0.602, 0.602, -0.799, 864.47, 406.195)" fill="#fff" stroke="#fff" stroke-width="20"/>
+    <path id="Path_36" d="M47.817,68.488,97.046-9.783V144.773Z" transform="translate(928 238)" fill="#9e2929"/>
+    <path id="Path_37" d="M47.817,68.488,97.046-9.783V144.773Z" transform="translate(769.863 372.99) rotate(180)" fill="#9e2929"/>
+    <path id="Path_38" d="M69.766-12.527,178.9,172.054,20.658,67.21Z" transform="translate(661 326)" fill="#9e2929"/>
+    <path id="Path_40" d="M70.878,10.076,195.1,148.814,1.093,69.526Z" transform="translate(1038.651 325.058) rotate(98)" fill="#9e2929"/>
+    <path id="Path_41" d="M57.453-.552,123.263,178-27.058,31.6Z" transform="matrix(-0.208, -0.978, 0.978, -0.208, 695.502, 267.944)" fill="#9e2929"/>
+    <path id="Path_42" d="M32.718,2.726l136.394,156.53L-.348,86.915Z" transform="translate(999.462 299.847) rotate(-169)" fill="#9e2929"/>
+  </g>
+</svg>

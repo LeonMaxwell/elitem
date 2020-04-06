@@ -155,7 +155,6 @@ input[type='button']:active{
 	margin-top: 2%;
 	opacity: 0.2;
     margin-left: 30%;
-
 }
 
 #name_micros li p{
@@ -221,7 +220,6 @@ input[type='button']:active{
     height: 7vh;
     background-color: #f5f5f5;
     text-align: center;
-    position: fixed;
     padding-left: 7%;
     padding-top: 1.5%;
     color: #b1afaf;
@@ -233,7 +231,6 @@ input[type='button']:active{
 
 .nav-list{
     display: block;
-    position: fixed;
     width: 17%;
     height: 62vh;
     background-color: #f5f5f5;
@@ -300,4 +297,19 @@ input[type='button']:active{
 
 .nav-list ul li #logout:active{
     color: #b1afaf;
+}
+
+.saveService input[type='button']{
+    background-color: #6675d6;
+    color: #fff;
+    cursor: pointer;
+    width: 150%;
+}
+
+.saveService input[type='button']:hover{
+    background-color: #8E9BEB;
+}
+
+.saveService input[type='button']:active{
+    background-color: #6675d6;
 }
