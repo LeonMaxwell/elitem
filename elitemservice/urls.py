@@ -10,5 +10,5 @@ urlpatterns = [
     path('profile/', views.Profile.as_view(), name='profile'),
     path('deleteService/', views.DeleteService.as_view(), name='deleteService'),
     path('addService/', views.AddService.as_view(), name='addService'),
-    path('api/', views.GetServiceList.as_view(), name='apiServices'),
+    path('/api/', views.GetServiceList.as_view(), name='apiServices'),
 ]
