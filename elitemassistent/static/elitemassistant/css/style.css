@@ -1,8 +1,16 @@
-.some_id_in_svg{
-    transform-origin: center center;
-    animation-name: rotation;
-    transform-box: fill-box;
-	animation-duration: 1s;
-	animation-iteration-count: infinite;
-	animation-timing-function: linear;
+.logosElhub{
+    padding-left: 46%;
+    width: 50%;
+}
+
+.unitToBots{
+    padding-left: 20%;
+}
+
+.logArea{
+    height: 50vh;
+}
+
+#toMessage{
+    width: 70%;
 }

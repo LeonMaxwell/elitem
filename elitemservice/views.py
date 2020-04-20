@@ -1,9 +1,12 @@
+import pandas as pd
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LogoutView
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 # Create your views here.
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import TemplateView, FormView, CreateView
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,6 +23,8 @@ class GetServiceList(APIView):
     def get(self, request):
         service = Service.objects.all()
         serialized = ServiceSerializer(service, many=True)
+        data = serialized.data
+        print(pd.DataFrame(pd.json_normalize(data[1])))
         return Response({'Services': serialized.data})
 
     def post(self, request):
@@ -34,30 +39,31 @@ class GetServiceList(APIView):
         return render(request, 'elitemservice/main.html', context)
 
 
-class AddService(FormView):
+class AddService(CreateView):
     template_name = 'elitemservice/forms/addservice.html'
     form_class = AddServiceForm
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'form': self.form_class})
 
-    def post(self, request, *args, **kwargs):
-        form = AddServiceForm(request.POST)
+
+class DoneAdd(CreateView):
+    model = Service
+    template_name = 'elitemservice/main.html'
+    fields = '__all__'
+    success_url = reverse_lazy('homepage')
+
+    method_decorator(csrf_protect)
+
+    def form_valid(self, form):
+        resp = super(DoneAdd, self).form_valid(form)
+        # после вызова суперметода в self.object находится созданный по форме объект
+        user = self.request.user
         model = Service.objects.all()
-        to_pk = model.count() + 1
-        name_service = form['name_service'].data
-        about_service = form['about_service'].data
-        file_service = form['file_service'].data
-        user = request.user
         if user.is_authenticated:
-            user.loads_services.create(
-                pk=to_pk,
-                name_service=name_service,
-                about_service=about_service,
-                file_service=file_service
-            )
+            user.loads_services.add(model.get(pk=self.object.pk))
             user.save()
-        return render(request, 'elitemservice/main.html')
+        return resp
 
 
 class DeleteService(CreateView):

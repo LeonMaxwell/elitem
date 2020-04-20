@@ -1,14 +1,12 @@
 {% load bootstrap4 %}
 {% if user.is_authenticated %}
-    <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% for field in form %}
-        {% bootstrap_field field layout='horizontal' %}
-    {% endfor %}
-    <label>
-        <input type="button" value="Добавить сервис" id="addService">
-    </label>
-</form>
+    <form method="post" id="addServiceForm" enctype="multipart/form-data" action="{% url 'doneAdd' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <label>
+            <input type="submit" value="Добавить сервис" id="addService">
+        </label>
+    </form>
 {% else %}
     <p>Что бы добавить сервис требуется авторизация!</p>
 {% endif %}

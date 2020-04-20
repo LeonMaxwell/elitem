@@ -48,7 +48,7 @@
                     'margin-top': '1%',
                     'height': '7vh',
                 });
-                 let extendfield = $('#extends');
+                let extendfield = $('#extends');
                 if (!extendfield.empty()){extendfield.val("")}
                 extendfield.append(data);
         }})
@@ -358,24 +358,6 @@
                 }
             })
         });
-
-
-        $(document).on('click touchstart', '#addService', function () {
-            $.ajax({
-                type: "POST",
-                url: "{% url 'addService' %}",
-                data: {
-                    'name_service': $('#id_name_service').val(),
-                    'about_service': $('#id_about_service').val(),
-                    'file_service': $('#id_file_service').val(),
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function () {
-                   window.location = '/'
-                }
-            })
-        })
-
 
     })
 
