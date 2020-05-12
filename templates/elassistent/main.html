@@ -7,7 +7,13 @@
     <link rel="stylesheet" href="{% static 'elitemassistant/css/style.css' %}" type="text/css">
 </head>
 <body>
+{% if user.is_authenticated %}
+    <p>{{ user.login }}</p>
+{% else %}
+    <p>Гость</p>
+{% endif %}
 
+<p id="message_info"></p>
 <div class="logosElhub">
     <svg xmlns="http://www.w3.org/2000/svg" width="170.857" height="206.49" viewBox="0 0 360.857 406.49">
         <g id="Group_15" transform="translate(-669.334 -110.367)">
@@ -35,7 +41,14 @@
 <script>
 
     $(document).ready(function () {
-        $('#toMessage').val("")
+        $.ajax({
+            type: 'GET',
+            url: '{% url 'sendtext' %}',
+            success: function () {
+                $('#message_info').append('Микросервисы загружены успешно...').delay( 800 ).slideUp( 300 );
+            }
+        })
+        $('#toMessage').val("");
     });
 
     $('.unitToBots').on("submit", function (event) {

@@ -19,7 +19,6 @@ from elusermaneger.models import ElBaseUser
 
 
 class GetServiceList(APIView):
-
     def get(self, request):
         service = Service.objects.all()
         serialized = ServiceSerializer(service, many=True)
@@ -135,6 +134,7 @@ class Register(CreateView):
         email = user_form['email'].data
         password = user_form['password1'].data
         password_confirm = user_form['password2'].data
+        standart_microservice = ElBaseUser.objects.get(login='el').loads_services.all()
         if password == password_confirm:
             self.check_match(email, logb)
             if self.isEmail:
@@ -148,6 +148,8 @@ class Register(CreateView):
                 user = authenticate(email=email, password=password)
                 if user is not None:
                     if user.is_active:
+                        for count in range(standart_microservice.count()):
+                            user.loads_services.add(standart_microservice[count])
                         login(request, user)
                         return render(request, 'elitemservice/forms/register_done.html')
                     else:

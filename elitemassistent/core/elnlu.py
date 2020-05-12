@@ -5,6 +5,7 @@ import nltk
 import pandas as pd
 import pymorphy2
 from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import pairwise_distances
 
@@ -35,12 +36,16 @@ def treatment_intents(*args):
     pass
 
 
-def main(text):
-    return text_normalized(text)
+def main(text, data_micros):
+    tfidf = TfidfVectorizer()
+    cv = CountVectorizer()
+    question_lemma = text_normalized(text)
+    df = pd.DataFrame(data_micros)
+    print(df)
+    return df.head(10)
 
 
 if __name__ == '__main__':
-
     res = list()
     itogList = list()
     patterns_normalize = list()
@@ -56,7 +61,7 @@ if __name__ == '__main__':
     df = pd.DataFrame(pd.json_normalize(data['intents']))
     print(df.head())
 
-    MyText = text_normalized("Увидимсяя позже")
+    MyText = text_normalized("пока")
 
     for itnr in df['patterns']:
         wrds = [text_normalized(wrds) for wrds in itnr]
@@ -83,7 +88,7 @@ if __name__ == '__main__':
                 bag.append(0)
 
         out_row = out_empty[:]
-        out_row[labels.index(docs_y[x])] = 1
+        out_row[labels.index(docs_y[x][x])] = 1
 
         training.append(bag)
         output.append(out_row)
