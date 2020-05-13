@@ -18,8 +18,8 @@ def service(request):
         if user.is_authenticated:
             serialized = ServiceSerializer(user.loads_services, many=True)
         else:
-            standart_services = ElBaseUser.objects.get(login='el').loads_services.all()
-            serialized = ServiceSerializer(standart_services, many=True)
+            standard_services = ElBaseUser.objects.get(login='el').loads_services.all()
+            serialized = ServiceSerializer(standard_services, many=True)
         return Response({'Services': serialized.data})
 
 

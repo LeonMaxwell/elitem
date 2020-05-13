@@ -32,17 +32,33 @@ def text_normalized(text):
     return " ".join(text_lemmater)
 
 
-def treatment_intents(*args):
-    pass
-
-
 def main(text, data_micros):
     tfidf = TfidfVectorizer()
     cv = CountVectorizer()
     question_lemma = text_normalized(text)
     df = pd.DataFrame(data_micros)
-    print(df)
-    return df.head(10)
+    df['lemmatized_about_service'] = df['about_service'].apply(text_normalized)
+    print(df.tail(15))
+    X = cv.fit_transform(df['lemmatized_about_service']).toarray()
+    features = cv.get_feature_names()
+    df_bow = pd.DataFrame(X, columns=features)
+    print(df_bow.head())
+    question_bow = cv.transform([question_lemma]).toarray()
+    print(question_bow)
+    cosine_value = 1 - pairwise_distances(df_bow, question_bow, metric='cosine')
+    print(cosine_value)
+    df['similarity_bow'] = cosine_value
+    df_simi = pd.DataFrame(df, columns=['lemmatized_about_service', 'similarity_bow'])
+    df_simi_sort = df_simi.sort_values(by='similarity_bow', ascending=False)
+    trash_hold = 0.2
+    df_trash_hold = df_simi_sort[df_simi_sort['similarity_bow'] > trash_hold]
+    print(df_trash_hold)
+    if df_trash_hold.empty:
+        response_itog = "Такого сервиса не существует"
+    else:
+        index_values = cosine_value.argmax()
+        response_itog = df['name_service'][index_values]
+    return response_itog
 
 
 if __name__ == '__main__':
