@@ -1,4 +1,3 @@
-import json
 import re
 
 import nltk
@@ -32,96 +31,45 @@ def text_normalized(text):
     return " ".join(text_lemmater)
 
 
-def main(text, data_micros):
-    tfidf = TfidfVectorizer()
+def processing_bow(query, records):
+    method = 'similarity_bow'
     cv = CountVectorizer()
+    X = cv.fit_transform(records['lemmatized_about_service']).toarray()
+    features = cv.get_feature_names()
+    df_bow = pd.DataFrame(X, columns=features)
+    question_bow = cv.transform([query]).toarray()
+    return compare_processing(question_bow, df_bow, records, method)
+
+
+def processing_tfidf(query, records):
+    tfidf = TfidfVectorizer()
+    method = 'similarity_tfidf'
+    X = tfidf.fit_transform(records['lemmatized_about_service']).toarray()
+    df_tfidf = pd.DataFrame(X, columns=tfidf.get_feature_names())
+    query_tfidf = tfidf.transform([query]).toarray()
+    return compare_processing(query_tfidf, df_tfidf, records, method)
+
+
+def compare_processing(proc_query, proc_records, records, name_method):
+    threshold = 0.2
+    cosine_value = 1 - pairwise_distances(proc_records, proc_query, metric='cosine')
+    records[name_method] = cosine_value
+    df_simi = pd.DataFrame(records, columns=['lemmatized_about_service', name_method])
+    df_simi_sort = df_simi.sort_values(by=name_method, ascending=False)
+    df_threshold = df_simi_sort[df_simi_sort[name_method] > threshold]
+    if df_threshold.empty:
+        result_compare = 'Такого сервиса не существует'
+    else:
+        index_value = cosine_value.argmax()
+        result_compare = records['name_service'][index_value]
+    return result_compare
+
+
+def main(text, data_micros):
     question_lemma = text_normalized(text)
     df = pd.DataFrame(data_micros)
     df['lemmatized_about_service'] = df['about_service'].apply(text_normalized)
     print(df.tail(15))
-    X = cv.fit_transform(df['lemmatized_about_service']).toarray()
-    features = cv.get_feature_names()
-    df_bow = pd.DataFrame(X, columns=features)
-    print(df_bow.head())
-    question_bow = cv.transform([question_lemma]).toarray()
-    print(question_bow)
-    cosine_value = 1 - pairwise_distances(df_bow, question_bow, metric='cosine')
-    print(cosine_value)
-    df['similarity_bow'] = cosine_value
-    df_simi = pd.DataFrame(df, columns=['lemmatized_about_service', 'similarity_bow'])
-    df_simi_sort = df_simi.sort_values(by='similarity_bow', ascending=False)
-    trash_hold = 0.2
-    df_trash_hold = df_simi_sort[df_simi_sort['similarity_bow'] > trash_hold]
-    print(df_trash_hold)
-    if df_trash_hold.empty:
-        response_itog = "Такого сервиса не существует"
-    else:
-        index_values = cosine_value.argmax()
-        response_itog = df['name_service'][index_values]
-    return response_itog
-
-
-if __name__ == '__main__':
-    res = list()
-    itogList = list()
-    patterns_normalize = list()
-    tfidf_vectorizer = TfidfVectorizer()
-    training = list()
-    output = list()
-    labels = list
-    docs_y = list()
-
-    with open('data/train.json') as file:
-        data = json.load(file)
-
-    df = pd.DataFrame(pd.json_normalize(data['intents']))
-    print(df.head())
-
-    MyText = text_normalized("пока")
-
-    for itnr in df['patterns']:
-        wrds = [text_normalized(wrds) for wrds in itnr]
-        res.append(wrds)
-        docs_y.append(df['tag'])
-
-    itogList = sorted((item for sublist in res for item in sublist))
-    print(itogList)
-    labels = [label for label in df['tag']]
-    labels = sorted(labels)
-    print(labels)
-
-    out_empty = [0 for _ in range(len(labels))]
-
-    for x, doc in enumerate(res):
-        bag = []
-
-        wrds = [text_normalized(w) for w in doc]
-
-        for w in itogList:
-            if w in wrds:
-                bag.append(1)
-            else:
-                bag.append(0)
-
-        out_row = out_empty[:]
-        out_row[labels.index(docs_y[x][x])] = 1
-
-        training.append(bag)
-        output.append(out_row)
-
-    print(training)
-    print(output)
-
-    values = tfidf_vectorizer.fit_transform(itogList)
-    future_names = tfidf_vectorizer.get_feature_names()
-    df_tfidf = pd.DataFrame(values.toarray(), columns=future_names)
-    df_tfidf = df_tfidf.head()
-    print(df_tfidf)
-
-    tf = tfidf_vectorizer.transform([MyText]).toarray()
-    cos = 1 - pairwise_distances(df_tfidf, tf, metric='cosine')
-    print(tf)
-
-    index_value = cos.argmax()
-    print(index_value)
-    print(df['responses'].loc[index_value])
+    method_result_bow = processing_bow(question_lemma, df)
+    method_result_tfidf = processing_tfidf(question_lemma, df)
+    return method_result_tfidf
