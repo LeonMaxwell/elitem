@@ -1,4 +1,6 @@
 # Create your views here.
+from importlib import import_module
+
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, FormView
@@ -25,6 +27,11 @@ def service(request):
 
 class BindWithAssistant(CreateView):
     load_service = list()
+    service_starter = False
+    specific_service = ''
+    assistant_massage = ''
+    loc = ''
+    result_service = ''
 
     def get(self, request, *args, **kwargs):
         user = request.user
@@ -39,8 +46,28 @@ class BindWithAssistant(CreateView):
 
     def post(self, request, *args, **kwargs):
         textToBots = request.POST.get('appeal', None)
-        toUser = elnlu.main(textToBots, self.load_service)
-        contaxt = {'text': textToBots, 'toUser': toUser}
+        if self.service_starter:
+            if textToBots == '/exit ' + self.specific_service:
+                BindWithAssistant.service_starter = False
+                BindWithAssistant.result_service = ''
+            else:
+                BindWithAssistant.result_service = self.loc.text_massage(textToBots)
+        else:
+            BindWithAssistant.specific_service = elnlu.main(textToBots, self.load_service)
+            if self.specific_service == 'Такого сервиса не существует':
+                pass
+            else:
+                BindWithAssistant.service_starter = True
+                for service in self.load_service:
+                    if service['name_service'] == self.specific_service:
+                        BindWithAssistant.loc = import_module(service['possibility'][1:].
+                                                              replace(".py", "").replace("/", "."))
+        contaxt = {
+            'text': textToBots,
+            'toUser': self.specific_service,
+            'service_start': self.service_starter,
+            'response_service': self.result_service,
+        }
         return render(request, 'elassistent/extinsions/log.html', contaxt)
 
 

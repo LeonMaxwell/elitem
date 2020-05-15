@@ -1,16 +1,51 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
 .logosElhub{
     padding-left: 46%;
     width: 50%;
+    margin-top: -2%;
 }
 
 .unitToBots{
     padding-left: 20%;
 }
 
+.unitToBots label{
+    float: left;
+    width: 100%;
+    padding-top: 1.5%;
+}
+
+#panelDiv{
+    height: 10vh;
+    width: 100%;
+    background-color: #f0f0f0;
+}
+
+::-webkit-scrollbar { /* chrome based */
+    width: 0;  /* ширина scrollbar'a */
+    background: transparent;  /* опционально */
+}
+
 .logArea{
-    height: 50vh;
+    height: 55vh;
+    margin-bottom: 2%;
+    overflow: auto;
+    -ms-overflow-style: none;  /* IE 10+ */
+    scrollbar-width: none; /* Firefox */
+}
+
+.logArea p{
+    padding-bottom: 2%;
 }
 
 #toMessage{
     width: 70%;
+}
+
+#message_info{
+    float: left;
 }

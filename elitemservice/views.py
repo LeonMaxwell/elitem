@@ -23,7 +23,7 @@ class GetServiceList(APIView):
         service = Service.objects.all()
         serialized = ServiceSerializer(service, many=True)
         data = serialized.data
-        print(pd.DataFrame(pd.json_normalize(data[1])))
+        print(pd.DataFrame(pd.json_normalize(data)))
         return Response({'Services': serialized.data})
 
     def post(self, request):
@@ -118,7 +118,6 @@ class Register(CreateView):
             self.isEmail = True
         except ObjectDoesNotExist:
             pass
-
         try:
             login_is_find = model.get(login=login)
             self.isLogin = True

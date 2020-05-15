@@ -35,17 +35,17 @@ def processing_bow(query, records):
     method = 'similarity_bow'
     cv = CountVectorizer()
     X = cv.fit_transform(records['lemmatized_about_service']).toarray()
-    features = cv.get_feature_names()
-    df_bow = pd.DataFrame(X, columns=features)
+    df_bow = pd.DataFrame(X, columns=cv.get_feature_names())
     question_bow = cv.transform([query]).toarray()
     return compare_processing(question_bow, df_bow, records, method)
 
 
 def processing_tfidf(query, records):
-    tfidf = TfidfVectorizer()
     method = 'similarity_tfidf'
+    tfidf = TfidfVectorizer()
     X = tfidf.fit_transform(records['lemmatized_about_service']).toarray()
     df_tfidf = pd.DataFrame(X, columns=tfidf.get_feature_names())
+    print(df_tfidf)
     query_tfidf = tfidf.transform([query]).toarray()
     return compare_processing(query_tfidf, df_tfidf, records, method)
 
@@ -54,6 +54,7 @@ def compare_processing(proc_query, proc_records, records, name_method):
     threshold = 0.2
     cosine_value = 1 - pairwise_distances(proc_records, proc_query, metric='cosine')
     records[name_method] = cosine_value
+    print(records)
     df_simi = pd.DataFrame(records, columns=['lemmatized_about_service', name_method])
     df_simi_sort = df_simi.sort_values(by=name_method, ascending=False)
     df_threshold = df_simi_sort[df_simi_sort[name_method] > threshold]
@@ -66,10 +67,11 @@ def compare_processing(proc_query, proc_records, records, name_method):
 
 
 def main(text, data_micros):
+    pd.options.display.expand_frame_repr = False
     question_lemma = text_normalized(text)
     df = pd.DataFrame(data_micros)
     df['lemmatized_about_service'] = df['about_service'].apply(text_normalized)
     print(df.tail(15))
     method_result_bow = processing_bow(question_lemma, df)
     method_result_tfidf = processing_tfidf(question_lemma, df)
-    return method_result_tfidf
+    return method_result_bow
