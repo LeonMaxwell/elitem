@@ -2,13 +2,11 @@
 from importlib import import_module
 
 from django.shortcuts import render
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, FormView
+from django.views.generic import TemplateView, CreateView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from elitemassistent.core import elnlu
-from elitemservice.forms import LoginUser, RegisterUser
 from elitemservice.serializers import ServiceSerializer
 from elusermaneger.models import ElBaseUser
 
@@ -34,6 +32,14 @@ class BindWithAssistant(CreateView):
     result_service = ''
 
     def get(self, request, *args, **kwargs):
+
+        BindWithAssistant.load_service = list()
+        BindWithAssistant.service_starter = False
+        BindWithAssistant.specific_service = ''
+        BindWithAssistant.assistant_massage = ''
+        BindWithAssistant.loc = ''
+        BindWithAssistant.result_service = ''
+
         user = request.user
         if user.is_authenticated:
             serialized = ServiceSerializer(user.loads_services, many=True)
@@ -50,40 +56,40 @@ class BindWithAssistant(CreateView):
             if textToBots == '/exit ' + self.specific_service:
                 BindWithAssistant.service_starter = False
                 BindWithAssistant.result_service = ''
+                return render(request, 'elassistent/extinsions/close.html',
+                              {
+                                'close_serive': self.specific_service,
+                                'request_user': textToBots
+                              })
             else:
-                BindWithAssistant.result_service = self.loc.text_massage(textToBots)
+                BindWithAssistant.result_service = self.loc.main(textToBots)
+                contaxt = {
+                    'request_user': textToBots,
+                    'name_service': self.specific_service,
+                    'service_start': self.service_starter,
+                    'response_service': self.result_service,
+                }
+                return render(request, 'elassistent/extinsions/act.html', contaxt)
+
         else:
             BindWithAssistant.specific_service = elnlu.main(textToBots, self.load_service)
             if self.specific_service == 'Такого сервиса не существует':
-                pass
+                return render(request, 'elassistent/extinsions/notfound.html', {
+                    'request_user': textToBots,
+                    'response_service': self.specific_service
+                })
             else:
                 BindWithAssistant.service_starter = True
                 for service in self.load_service:
                     if service['name_service'] == self.specific_service:
                         BindWithAssistant.loc = import_module(service['possibility'][1:].
                                                               replace(".py", "").replace("/", "."))
-        contaxt = {
-            'text': textToBots,
-            'toUser': self.specific_service,
-            'service_start': self.service_starter,
-            'response_service': self.result_service,
-        }
-        return render(request, 'elassistent/extinsions/log.html', contaxt)
+                        return render(request, 'elassistent/extinsions/found.html',
+                                      {
+                                          'found_service': self.specific_service,
+                                          'request_user': textToBots
+                                      })
 
 
 class HomePage(TemplateView):
     template_name = 'elassistent/main.html'
-
-
-class Login(FormView):
-    template_name = 'elassistent/intermediate/authorization.html'
-    form_class = LoginUser
-
-
-class Register(CreateView):
-    isEmail = False
-    isLogin = False
-    template_name = 'elassistent/intermediate/authorization.html'
-    form_class = RegisterUser
-    model = ElBaseUser
-    success_url = reverse_lazy('homepage')

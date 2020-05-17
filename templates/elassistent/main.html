@@ -7,13 +7,8 @@
     <link rel="stylesheet" href="{% static 'elitemassistant/css/style.css' %}" type="text/css">
 </head>
 <body>
-{% if user.is_authenticated %}
-    <p>{{ user.login }}</p>
-{% else %}
-    <p>Гость</p>
-{% endif %}
 
-<p id="message_info"></p>
+<div id="message_info"></div>
 <div class="logosElhub">
     <svg xmlns="http://www.w3.org/2000/svg" width="150.857" height="206.49" viewBox="0 0 360.857 406.49">
         <g id="Group_15" transform="translate(-669.334 -110.367)">
@@ -30,14 +25,20 @@
 </div>
 
 <form method="post" class="unitToBots">
-    {% csrf_token %}
     <div class="logArea"></div>
-    <label>
-        <input type="text" id="toMessage" placeholder="Введите сообщение боту...">
-        <input type="button" id="btnToMessage">
-    </label>
+    {% csrf_token %}
+        <div id="panelDiv">
+            {% if user.is_authenticated %}
+                <p style="color: #878787">{{ user.login }}</p>
+            {% else %}
+                <p style="color: #753B3B">Гость</p>
+            {% endif %}
+            <label>
+                <input type="text" id="toMessage" placeholder="Введите сообщение боту...">
+                <input type="image" src="{% static 'elitemassistant/img/send.svg' %}" id="btnToMessage" alt="">
+            </label>
+        </div>
 </form>
-<div id="panelDiv"></div>
 <script src="{% static 'elitemassistant/js/jquery.js' %}"></script>
 <script>
 
@@ -46,7 +47,7 @@
             type: 'GET',
             url: '{% url 'sendtext' %}',
             success: function () {
-                $('#message_info').append('Микросервисы загружены успешно...').delay( 800 ).slideUp( 300 );
+                $('#message_info').append('<p> Микросервисы загружены успешно...</p>').delay( 800 ).slideUp( 300 );
             }
         })
         $('#toMessage').val("");
@@ -65,28 +66,14 @@
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
             success: function (data) {
-                $('.logArea').append(data)
-                $('#toMessage').val("")
+                $('.logArea').append(data).animate({ scrollTop: 9999 }, 0)
+                if ($('.logArea div').length === 90){
+                    $('.logArea :first').remove()
+                }
+                $('#toMessage').val("");
             }
         })
     });
-
-    $('#toMessage').keypress(function (event) {
-        if (event.keyCode === 13){
-            $.ajax({
-                type: "POST",
-                url: '{% url 'sendtext' %}',
-                data: {
-                    'appeal': $('#toMessage').val(),
-                    'csrfmiddlewaretoken': '{{ csrf_token }}'
-                },
-                success: function (data) {
-                    $('.logArea').append(data)
-                    $('#toMessage').val("")
-                }
-            })
-        }
-    })
 </script>
 
 </body>

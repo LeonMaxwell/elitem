@@ -1,0 +1,10 @@
+{% extends 'elassistent/extinsions/log.html' %}
+{% block content %}
+    <div id="requestPersonal">
+        <p>{{ request_user }}</p>
+    </div>
+
+    <div id="tab_run">
+        <p>Запущен сервис: {{ found_service }}</p>
+    </div>
+{% endblock %}
