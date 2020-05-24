@@ -12,7 +12,7 @@
     <ul id="name_micros">
         {% for foo in user.loads_services.all %}
             <li class="saveService" id="{{ foo.pk }}">
-                <span></span>
+                <span id="line"></span>
                 <ul id="formLoad">
                     <input type="button" value="Удалить сервис" class="btnDelete" id="{{ foo.pk }}">
                 </ul>

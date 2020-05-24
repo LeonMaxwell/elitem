@@ -25,8 +25,8 @@
 </div>
 
 <form method="post" class="unitToBots">
-    <div class="logArea"></div>
     {% csrf_token %}
+    <div class="logArea"></div>
         <div id="panelDiv">
             {% if user.is_authenticated %}
                 <p style="color: #878787">{{ user.login }}</p>
@@ -35,12 +35,34 @@
             {% endif %}
             <label>
                 <input type="text" id="toMessage" placeholder="Введите сообщение боту...">
-                <input type="image" src="{% static 'elitemassistant/img/send.svg' %}" id="btnToMessage" alt="">
+                <input type="image" style="display: none" src="{% static 'elitemassistant/img/send.svg' %}" id="btnToMessage" alt="">
+                <input type="image" src="{% static 'elitemassistant/img/iconfinder_microphone_227578.svg' %}" id="btnToRecord" alt="">
             </label>
         </div>
 </form>
 <script src="{% static 'elitemassistant/js/jquery.js' %}"></script>
+<script src="{% static 'elitemassistant/js/recorderjs.js' %}"></script>
 <script>
+
+    let gumStream;
+    let rec;
+    let input;
+
+    let AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioContext = new AudioContext;
+
+    $('#toMessage').on('keyup',function(){
+        var $this = $(this),
+         val = $this.val();
+
+        if(val.length >= 1){
+            $('#btnToRecord').fadeOut(500).hide()
+            $('#btnToMessage').fadeIn(500).show()
+         }else {
+            $('#btnToRecord').fadeIn(500).show()
+            $('#btnToMessage').fadeOut(500).hide()
+        }
+    });
 
     $(document).ready(function () {
         $.ajax({
@@ -74,6 +96,56 @@
             }
         })
     });
+
+    $(function() {
+        $(document).on('click touchstart', '#btnToStopRecord', function(){
+            let filename = new Date().toISOString();
+            console.log("Остановка записи")
+            rec.stop()
+            gumStream.getAudioTracks()[0].stop();
+            $('#btnToStopRecord').attr('id', 'btnToRecord');
+            $("#toMessage").prop('disabled', false).attr('placeholder', "Введите сообщение боту...")
+            rec.exportWAV(function (blob) {
+                let fd = new FormData();
+                fd.append("audio_data",blob, filename);
+                let csrftoken = '{{ csrf_token }}'
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', '{% url 'sendtext' %}', true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.send(fd)
+
+            })
+      })
+
+        $(document).on('click touchstart', '#btnToRecord', function(){
+            console.log("Начало записи звука")
+
+            let constraints = {audio: true, video: false}
+
+            $('#btnToRecord').attr('id', 'btnToStopRecord');
+            $("#toMessage").prop('disabled', true).attr('placeholder', "Недоступен, пока идет запись...")
+            navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+                console.log("getUserMedia() доступен, поток создан, инициализация Recorder.js");
+
+                audioContext = new AudioContext();
+
+                // Формат записи
+                /*document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"*/
+
+                gumStream = stream
+
+                input = audioContext.createMediaStreamSource(stream)
+
+                rec = new Recorder(input, {numChannels:1})
+
+                rec.record()
+
+                console.log("Запись началась")
+            }).catch(function (err) {
+                alert(err)
+            })
+        })
+    })
 </script>
 
 </body>

@@ -17,7 +17,7 @@
 
 .unitToBots label{
     width: 80%;
-    padding-left: 22%;
+    padding-left: 18%;
 }
 
 #panelDiv{
@@ -58,11 +58,15 @@
 .logArea .session{
     width: 70%;
     padding-bottom: 2%;
+    color: #fff;
+    font-family: Consolas, sans-serif;
+    font-weight: bold;
+    font-size: 0.9em;
 }
 
 .logArea .session #requestPersonal{
     float: right;
-    background-color: #2b669a;
+    background-color: #6675d6;
     border-radius: 20px;
     padding: 2% 8% 2% 3%;
 }
@@ -70,7 +74,7 @@
 .logArea .session #responseAssistant{
     float: left;
     margin-top: 5%;
-    background-color: #8EF13C;
+    background-color: #e65555;
     padding: 2% 3% 2% 8%;
     border-radius: 20px;
 }
@@ -79,17 +83,29 @@
     width: 70%;
 }
 
-#btnToMessage{
+#btnToMessage, #btnToRecord, #btnToStopRecord{
     width: 2.5%;
     margin-bottom: -0.7%;
 }
 
+#btnToStopRecord{
+    filter: invert(53%) sepia(52%) saturate(5803%) hue-rotate(334deg) brightness(111%) contrast(81%);
+}
+
 #btnToMessage:hover{
-    filter: invert(.9);
+    filter: invert(60%) sepia(60%) saturate(4642%) hue-rotate(210deg) brightness(88%) contrast(90%);
 }
 
 #btnToMessage:active{
-    filter: invert(.4);
+    filter: invert(53%) sepia(52%) saturate(5803%) hue-rotate(334deg) brightness(111%) contrast(81%);
+}
+
+#btnToRecord:hover{
+    filter: invert(60%) sepia(60%) saturate(4642%) hue-rotate(210deg) brightness(88%) contrast(90%);
+}
+
+#btnToRecord:active{
+    filter: invert(53%) sepia(52%) saturate(5803%) hue-rotate(334deg) brightness(111%) contrast(81%);
 }
 
 #message_info{

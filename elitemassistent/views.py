@@ -1,6 +1,7 @@
 # Create your views here.
 from importlib import import_module
 
+import speech_recognition as sr
 from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView
 from rest_framework.decorators import api_view
@@ -31,6 +32,7 @@ class BindWithAssistant(CreateView):
     loc = ''
     result_service = ''
 
+
     def get(self, request, *args, **kwargs):
 
         BindWithAssistant.load_service = list()
@@ -51,6 +53,13 @@ class BindWithAssistant(CreateView):
         return render(request, 'elassistent/main.html')
 
     def post(self, request, *args, **kwargs):
+        r = sr.Recognizer()
+        audioToBots = request.FILES['audio_data']
+        with sr.AudioFile(audioToBots) as source:
+            audio = r.record(source)
+        text = r.recognize_google(audio, language='ru-RU')
+        print(text)
+        print('Что то тут нето')
         textToBots = request.POST.get('appeal', None)
         if self.service_starter:
             if textToBots == '/exit ' + self.specific_service:
