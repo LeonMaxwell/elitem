@@ -56,10 +56,10 @@
          val = $this.val();
 
         if(val.length >= 1){
-            $('#btnToRecord').fadeOut(500).hide()
+            $('#btnToRecord').fadeOut(500).hide();
             $('#btnToMessage').fadeIn(500).show()
          }else {
-            $('#btnToRecord').fadeIn(500).show()
+            $('#btnToRecord').fadeIn(500).show();
             $('#btnToMessage').fadeOut(500).hide()
         }
     });
@@ -71,7 +71,7 @@
             success: function () {
                 $('#message_info').append('<p> Микросервисы загружены успешно...</p>').delay( 800 ).slideUp( 300 );
             }
-        })
+        });
         $('#toMessage').val("");
     });
 
@@ -88,7 +88,7 @@
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
             success: function (data) {
-                $('.logArea').append(data).animate({ scrollTop: 9999 }, 0)
+                $('.logArea').append(data).animate({ scrollTop: 9999 }, 0);
                 if ($('.logArea div').length === 90){
                     $('.logArea :first').remove()
                 }
@@ -100,30 +100,47 @@
     $(function() {
         $(document).on('click touchstart', '#btnToStopRecord', function(){
             let filename = new Date().toISOString();
-            console.log("Остановка записи")
-            rec.stop()
+            console.log("Остановка записи");
+            rec.stop();
             gumStream.getAudioTracks()[0].stop();
             $('#btnToStopRecord').attr('id', 'btnToRecord');
-            $("#toMessage").prop('disabled', false).attr('placeholder', "Введите сообщение боту...")
+            $("#toMessage").prop('disabled', false).attr('placeholder', "Введите сообщение боту...");
             rec.exportWAV(function (blob) {
-                let fd = new FormData();
+                /*let fd = new FormData();
                 fd.append("audio_data",blob, filename);
-                let csrftoken = '{{ csrf_token }}'
+                let csrftoken = '{{ csrf_token }}';
                 let xhr = new XMLHttpRequest();
                 xhr.open('POST', '{% url 'sendtext' %}', true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                xhr.send(fd)
-
+                xhr.send(fd)*/
+                let data = new FormData();
+                data.append('csrfmiddlewaretoken', getCookie('csrftoken'));
+                data.append('audio', blob);
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    processData: false,
+                    contentType: false,
+                    cache:false,
+                    url: '{% url 'sendtext' %}',
+                    data: data,
+                    success: function (data) {
+                        $('.logArea').append(data).animate({ scrollTop: 9999 }, 0);
+                        if ($('.logArea div').length === 90){
+                            $('.logArea :first').remove()
+                        }
+                    }
+                })
             })
-      })
+        });
 
         $(document).on('click touchstart', '#btnToRecord', function(){
-            console.log("Начало записи звука")
+            console.log("Начало записи звука");
 
-            let constraints = {audio: true, video: false}
+            let constraints = {audio: true, video: false};
 
             $('#btnToRecord').attr('id', 'btnToStopRecord');
-            $("#toMessage").prop('disabled', true).attr('placeholder', "Недоступен, пока идет запись...")
+            $("#toMessage").prop('disabled', true).attr('placeholder', "Недоступен, пока идет запись...");
             navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
                 console.log("getUserMedia() доступен, поток создан, инициализация Recorder.js");
 
@@ -132,20 +149,37 @@
                 // Формат записи
                 /*document.getElementById("formats").innerHTML="Format: 1 channel pcm @ "+audioContext.sampleRate/1000+"kHz"*/
 
-                gumStream = stream
+                gumStream = stream;
 
-                input = audioContext.createMediaStreamSource(stream)
+                input = audioContext.createMediaStreamSource(stream);
 
-                rec = new Recorder(input, {numChannels:1})
+                rec = new Recorder(input, {numChannels:1});
 
-                rec.record()
+                rec.record();
 
                 console.log("Запись началась")
             }).catch(function (err) {
                 alert(err)
             })
         })
-    })
+    });
+
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 </script>
 
 </body>

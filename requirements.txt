@@ -5,11 +5,11 @@ django-crispy-forms==1.9.0
 django-forms-bootstrap==3.1.0
 djangorestframework==3.11.0
 gunicorn==20.0.4
-psycopg2-binary==2.8.4
+psycopg2-binary==2.8.5
 sqlparse==0.3.1
-nltk~=3.4.5
+nltk~=3.5
 pymorphy2~=0.8
 pandas~=1.0.3
-scikit-learn~=0.22.2.post1
+scikit-learn~=0.23.1
 numpy~=1.18.2
 tensorflow~=2.1.0

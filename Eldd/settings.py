@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'elitemassistent.apps.ElitemassistentConfig',
     'elservicecollection.apps.ElservicecollectionConfig',
     'elusermaneger.apps.ElusermanegerConfig',
-    'elhub.apps.ElhubConfig',
 ]
 
 MIDDLEWARE = [
@@ -83,8 +82,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'elitem_resources',
-        'USER': 'eladmin',
-        'PASSWORD': 'admin',
+        'USER': 'postgres',
+        'PASSWORD': 'Lion2011',
         'HOST': 'localhost',
         'PORT': '',
     }

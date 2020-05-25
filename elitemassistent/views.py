@@ -53,14 +53,20 @@ class BindWithAssistant(CreateView):
         return render(request, 'elassistent/main.html')
 
     def post(self, request, *args, **kwargs):
-        r = sr.Recognizer()
-        audioToBots = request.FILES['audio_data']
-        with sr.AudioFile(audioToBots) as source:
-            audio = r.record(source)
-        text = r.recognize_google(audio, language='ru-RU')
-        print(text)
-        print('Что то тут нето')
         textToBots = request.POST.get('appeal', None)
+        if textToBots:
+            pass
+        else:
+            r = sr.Recognizer()
+            audioToBots = request.FILES['audio']
+            audioFiles = sr.AudioFile(audioToBots)
+            with audioFiles as source:
+                audio = r.record(source)
+            try:
+                textToBots = r.recognize_google(audio, language="ru-RU")
+                print("Text: " + textToBots)
+            except Exception as e:
+                print("Exception: " + str(e))
         if self.service_starter:
             if textToBots == '/exit ' + self.specific_service:
                 BindWithAssistant.service_starter = False

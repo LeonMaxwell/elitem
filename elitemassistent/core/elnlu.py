@@ -9,6 +9,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import pairwise_distances
 
 nltk.download('punkt')
+nltk.download('stopwords')
 morph = pymorphy2.MorphAnalyzer()
 
 
